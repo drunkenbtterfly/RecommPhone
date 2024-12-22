@@ -1,0 +1,151 @@
+<?php
+// Ambil bobot dari form
+$W1 = $_POST['harga'];
+$W2 = $_POST['ram'];
+$W3 = $_POST['memori'];
+$W4 = $_POST['processor'];
+$W5 = $_POST['kamera'];
+
+// Koneksi ke database
+$selectdb = new mysqli("localhost", "root", "", "db_hp");
+if ($selectdb->connect_error) {
+    die("Koneksi gagal: " . $selectdb->connect_error);
+}
+
+// Ambil data dari database
+$query = "SELECT * FROM data_hp";
+$result = $selectdb->query($query);
+$matrix = [];
+$names = [];
+
+while ($row = $result->fetch_assoc()) {
+    $matrix[] = [
+        (float) $row['harga_angka'],
+        (float) $row['ram_angka'],
+        (float) $row['memori_angka'],
+        (float) $row['processor_angka'],
+        (float) $row['kamera_angka']
+    ];
+    $names[] = $row['nama_hp'];
+}
+
+// Fungsi pembagi normalisasi
+function pembagiNM($matrix) {
+    $pembagi = [];
+    for ($i = 0; $i < count($matrix[0]); $i++) {
+        $sum = 0;
+        foreach ($matrix as $row) {
+            $sum += pow($row[$i], 2);
+        }
+        $pembagi[] = sqrt($sum);
+    }
+    return $pembagi;
+}
+
+// Normalisasi matriks
+function normalisasi($matrix, $pembagi) {
+    $normalized = [];
+    foreach ($matrix as $row) {
+        $normalizedRow = [];
+        for ($i = 0; $i < count($row); $i++) {
+            $normalizedRow[] = $row[$i] / $pembagi[$i];
+        }
+        $normalized[] = $normalizedRow;
+    }
+    return $normalized;
+}
+
+// Pembobotan matriks
+function pembobotan($normalized, $weights) {
+    $weighted = [];
+    foreach ($normalized as $row) {
+        $weightedRow = [];
+        for ($i = 0; $i < count($row); $i++) {
+            $weightedRow[] = $row[$i] * $weights[$i];
+        }
+        $weighted[] = $weightedRow;
+    }
+    return $weighted;
+}
+
+// Hitung solusi ideal positif dan negatif
+function solusiIdeal($matrix) {
+    $idealPositif = [];
+    $idealNegatif = [];
+    for ($i = 0; $i < count($matrix[0]); $i++) {
+        $column = array_column($matrix, $i);
+        $idealPositif[] = max($column);
+        $idealNegatif[] = min($column);
+    }
+    return [$idealPositif, $idealNegatif];
+}
+
+// Hitung jarak solusi
+function jarakSolusi($matrix, $ideal) {
+    $jarak = [];
+    foreach ($matrix as $row) {
+        $sum = 0;
+        for ($i = 0; $i < count($row); $i++) {
+            $sum += pow($row[$i] - $ideal[$i], 2);
+        }
+        $jarak[] = sqrt($sum);
+    }
+    return $jarak;
+}
+
+// Hitung skor preferensi
+function skorPreferensi($jarakPositif, $jarakNegatif) {
+    $skor = [];
+    for ($i = 0; $i < count($jarakPositif); $i++) {
+        $skor[] = $jarakNegatif[$i] / ($jarakPositif[$i] + $jarakNegatif[$i]);
+    }
+    return $skor;
+}
+
+// Proses perhitungan TOPSIS
+$pembagi = pembagiNM($matrix);
+$normalized = normalisasi($matrix, $pembagi);
+$weights = [$W1, $W2, $W3, $W4, $W5];
+$weighted = pembobotan($normalized, $weights);
+list($idealPositif, $idealNegatif) = solusiIdeal($weighted);
+$jarakPositif = jarakSolusi($weighted, $idealPositif);
+$jarakNegatif = jarakSolusi($weighted, $idealNegatif);
+$skor = skorPreferensi($jarakPositif, $jarakNegatif);
+
+// Urutkan hasil berdasarkan skor preferensi
+arsort($skor);
+
+// Tampilkan hasil
+echo "<h1>Hasil Rekomendasi Smartphone</h1>";
+echo "<table border='1'>";
+echo "<tr><th>Nama Smartphone</th><th>Skor Preferensi</th></tr>";
+foreach ($skor as $index => $value) {
+    echo "<tr><td>" . $names[$index] . "</td><td>" . round($value, 4) . "</td></tr>";
+}
+echo "</table>";
+
+// Tampilkan matriks normalisasi dan pembobotan untuk verifikasi
+echo "<h2>Matriks Normalisasi</h2>";
+echo "<table border='1'>";
+foreach ($normalized as $row) {
+    echo "<tr>";
+    foreach ($row as $cell) {
+        echo "<td>" . round($cell, 4) . "</td>";
+    }
+    echo "</tr>";
+}
+echo "</table>";
+
+echo "<h2>Matriks Pembobotan</h2>";
+echo "<table border='1'>";
+foreach ($weighted as $row) {
+    echo "<tr>";
+    foreach ($row as $cell) {
+        echo "<td>" . round($cell, 4) . "</td>";
+    }
+    echo "</tr>";
+}
+echo "</table>";
+
+$selectdb->close();
+?>

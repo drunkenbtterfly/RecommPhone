@@ -10,10 +10,10 @@
         theme: {
           extend: {
             colors: {
-              clifford: '#da373d', // Warna custom
+              clifford: '#da373d',
             },
             fontFamily: {
-              roboto: ['Roboto', 'sans-serif'], // Tambahkan font Roboto
+              roboto: ['Roboto', 'sans-serif'],
             },
           },
         },
@@ -72,6 +72,19 @@
                                 <option value="5">> 32 Gb</option>
                             </select>
                         </div>
+                        
+                        <!-- Baterai -->
+                        <div class="text-lg font-semibold">Baterai</div>
+                        <div>
+                            <select name="memori" required class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-black">
+                                <option value="" disabled selected>Kriteria Baterai</option>
+                                <option value="1">< 2000 mAH</option>
+                                <option value="2">2000 - 3000 mAH</option>
+                                <option value="3">4000 mAH</option>
+                                <option value="4">5000 mAH</option>
+                                <option value="5">>5000 mAH</option>
+                            </select>
+                        </div>
 
                         <!-- Processor -->
                         <div class="text-lg font-semibold">Processor</div>
@@ -92,6 +105,17 @@
                                 <option value="1">0 - 8 Mp</option>
                                 <option value="3">8 - 13 Mp</option>
                                 <option value="5">>13 Mp</option>
+                            </select>
+                        </div>
+                        
+                        <!-- Jaringan -->
+                        <div class="text-lg font-semibold">Jaringan</div>
+                        <div>
+                            <select name="kamera" required class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-black">
+                                <option value="" disabled selected>Kriteria Jaringan</option>
+                                <option value="1">3G</option>
+                                <option value="3">4G</option>
+                                <option value="5">5G</option>
                             </select>
                         </div>
                     </div>

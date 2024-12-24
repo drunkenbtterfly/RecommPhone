@@ -3,7 +3,7 @@
 $host = "localhost";
 $user = "root";
 $pass = "";
-$name = "db_hp";
+$name = "hp";
 
 try {
     //create PDO connection

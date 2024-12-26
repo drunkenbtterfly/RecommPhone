@@ -39,11 +39,11 @@
                         <div>
                             <select name="harga" required class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-black">
                                 <option value="" disabled selected>Kriteria Harga</option>
-                                <option value="5">< Rp. 1.000.000</option>
-                                <option value="4">1.000.000 - 3.000.000</option>
-                                <option value="3">3.000.000 - 4.000.000</option>
-                                <option value="2">4.000.000 - 5.000.000</option>
-                                <option value="1">> 5.000.000</option>
+                                <option value="1">1.000.000</option>
+                                <option value="2">2.000.000 - 3.000.000</option>
+                                <option value="3">4.000.000 - 6.000.000</option>
+                                <option value="4">7.000.000 - 10.000.000</option>
+                                <option value="5">>10.000.000</option>
                             </select>
                         </div>
 
@@ -52,11 +52,12 @@
                         <div>
                             <select name="ram" required class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-black">
                                 <option value="" disabled selected>Kriteria RAM</option>
-                                <option value="1">0 - 1 Gb</option>
+                                <option value="1">1 Gb</option>
                                 <option value="2">2 Gb</option>
                                 <option value="3">3 Gb</option>
                                 <option value="4">4 Gb</option>
-                                <option value="5">> 5 Gb</option>
+                                <option value="5">6 - 8 Gb</option>
+                                <option value="6">12 Gb</option>
                             </select>
                         </div>
 
@@ -65,24 +66,22 @@
                         <div>
                             <select name="memori" required class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-black">
                                 <option value="" disabled selected>Kriteria Penyimpanan</option>
-                                <option value="1">0 - 4 Gb</option>
-                                <option value="2">8 Gb</option>
-                                <option value="3">16 Gb</option>
-                                <option value="4">32 Gb</option>
-                                <option value="5">> 32 Gb</option>
+                                <option value="1">64 Gb</option>
+                                <option value="2">128 Gb</option>
+                                <option value="3">256 Gb</option>
+                                <option value="4">512 Gb</option>
                             </select>
                         </div>
                         
                         <!-- Baterai -->
                         <div class="text-lg font-semibold">Baterai</div>
                         <div>
-                            <select name="memori" required class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-black">
+                            <select name="baterai" required class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-black">
                                 <option value="" disabled selected>Kriteria Baterai</option>
-                                <option value="1">< 2000 mAH</option>
-                                <option value="2">2000 - 3000 mAH</option>
+                                <option value="1">2000 mAH</option>
+                                <option value="2">3000 mAH</option>
                                 <option value="3">4000 mAH</option>
                                 <option value="4">5000 mAH</option>
-                                <option value="5">>5000 mAH</option>
                             </select>
                         </div>
 
@@ -91,9 +90,12 @@
                         <div>
                             <select name="processor" required class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-black">
                                 <option value="" disabled selected>Kriteria Processor</option>
-                                <option value="1">Dualcore</option>
-                                <option value="3">Quadcore</option>
-                                <option value="5">Octacore</option>
+                                <option value="1">Snapdragon</option>
+                                <option value="2">Apple Bionic</option>
+                                <option value="3">Helio</option>
+                                <option value="4">Mediatek Dimensity</option>
+                                <option value="5">Exynos</option>
+                                <option value="6">Unisoc</option>
                             </select>
                         </div>
 
@@ -102,20 +104,20 @@
                         <div>
                             <select name="kamera" required class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-black">
                                 <option value="" disabled selected>Kriteria Kamera</option>
-                                <option value="1">0 - 8 Mp</option>
-                                <option value="3">8 - 13 Mp</option>
-                                <option value="5">>13 Mp</option>
+                                <option value="1">12 - 13 MP</option>
+                                <option value="2">48 - 64 MP</option>
+                                <option value="3">>100 MP</option>
                             </select>
                         </div>
                         
                         <!-- Jaringan -->
                         <div class="text-lg font-semibold">Jaringan</div>
                         <div>
-                            <select name="kamera" required class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-black">
+                            <select name="jaringan" required class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-black">
                                 <option value="" disabled selected>Kriteria Jaringan</option>
                                 <option value="1">3G</option>
-                                <option value="3">4G</option>
-                                <option value="5">5G</option>
+                                <option value="2">4G</option>
+                                <option value="3">5G</option>
                             </select>
                         </div>
                     </div>

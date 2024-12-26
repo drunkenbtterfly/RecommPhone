@@ -15,34 +15,55 @@ if ($selectdb->connect_error) {
 // Aktifkan mode error reporting untuk mysqli
 $selectdb->report_mode = MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT;
 
-// Ambil data dari form dengan validasi
-$harga = isset($_POST['harga']) ? intval($_POST['harga']) : 0;
-$ram = isset($_POST['ram']) ? intval($_POST['ram']) : 0;
-$memori = isset($_POST['memori']) ? intval($_POST['memori']) : 0;
-$baterai = isset($_POST['baterai']) ? intval($_POST['baterai']) : 0;
-$processor = isset($_POST['processor']) ? intval($_POST['processor']) : 0;
-$kamera = isset($_POST['kamera']) ? intval($_POST['kamera']) : 0;
-$jaringan = isset($_POST['jaringan']) ? intval($_POST['jaringan']) : 0;
+// Validasi input
+$harga = isset($_POST['harga']) && $_POST['harga'] > 0 ? intval($_POST['harga']) : PHP_INT_MAX;
+$ram = isset($_POST['ram']) && $_POST['ram'] > 0 ? intval($_POST['ram']) : 0;
+$memori = isset($_POST['memori']) && $_POST['memori'] > 0 ? intval($_POST['memori']) : 0;
+$baterai = isset($_POST['baterai']) && $_POST['baterai'] > 0 ? intval($_POST['baterai']) : 0;
+$processor = isset($_POST['processor']) && $_POST['processor'] > 0 ? intval($_POST['processor']) : 0;
+$kamera = isset($_POST['kamera']) && $_POST['kamera'] > 0 ? intval($_POST['kamera']) : 0;
+$jaringan = isset($_POST['jaringan']) && $_POST['jaringan'] > 0 ? intval($_POST['jaringan']) : 0;
 
 // Query untuk mendapatkan rekomendasi handphone menggunakan prepared statement
-$stmt = $selectdb->prepare("
-    SELECT * FROM data_hp WHERE 
-        harga_angka >= ? AND 
-        ram_angka >= ? AND 
-        memori_angka >= ? AND 
-        baterai_angka >= ? AND 
-        processor_angka >= ? AND 
-        kamera_angka >= ? AND
-        jaringan_angka >= ?
-    ORDER BY harga_angka DESC, ram_angka DESC, memori_angka DESC, processor_angka DESC, kamera_angka DESC
-");
+$stmt = $selectdb->prepare("SELECT * FROM data_hp WHERE 
+    harga_angka <= ? AND 
+    ram_angka >= ? AND 
+    memori_angka >= ? AND 
+    baterai_angka >= ? AND 
+    processor_angka >= ? AND 
+    kamera_angka >= ? AND
+    jaringan_angka >= ?");
 $stmt->bind_param('iiiiiii', $harga, $ram, $memori, $baterai, $processor, $kamera, $jaringan);
 $stmt->execute();
 $result = $stmt->get_result();
 
 // Query untuk matriks perhitungan
-$matrixQuery = "SELECT id_hp, nama_hp, harga_angka, ram_angka, memori_angka, baterai_angka, processor_angka, kamera_angka, jaringan_hp FROM data_hp";
+$matrixQuery = "SELECT id_hp, nama_hp, harga_angka, ram_angka, memori_angka, baterai_angka, processor_angka, kamera_angka, jaringan_angka FROM data_hp";
 $matrixResult = $selectdb->query($matrixQuery);
+
+// Fungsi pembagi normalisasi
+function pembagiNormalisasi($matrik) {
+    $pembagi = [];
+    for ($i = 0; $i < count($matrik[0]); $i++) {
+        $sumOfSquares = 0;
+        foreach ($matrik as $row) {
+            $sumOfSquares += pow($row[$i], 2);
+        }
+        $pembagi[] = sqrt($sumOfSquares);
+    }
+    return $pembagi;
+}
+
+// Fungsi transpose matriks
+function transposeArray($array) {
+    $transposed = [];
+    foreach ($array as $row) {
+        foreach ($row as $colIndex => $colValue) {
+            $transposed[$colIndex][] = $colValue;
+        }
+    }
+    return $transposed;
+}
 ?>
 
 <!DOCTYPE html>
@@ -91,15 +112,16 @@ $matrixResult = $selectdb->query($matrixQuery);
         <?php endif; ?>
 
         <div class="w-full max-w-4xl mx-auto">
-            <h2 class="text-center text-xl font-bold mt-10 mb-6">Matriks Perhitungan</h2>
             <div class="bg-white shadow-md rounded-md">
                 <button id="accordion-toggle" 
                         class="w-full text-left p-4 text-gray-800 font-medium border-b border-gray-200 focus:outline-none hover:bg-gray-100">
                     Klik untuk melihat tabel
                 </button>
                 <div id="accordion-content" class="hidden p-4">
+                    <!-- Tabel Matrik Perhitungan -->
+                    <h2 class="text-center text-xl font-bold my-6">Matriks Smartphone</h2>
                     <?php if ($matrixResult->num_rows > 0): ?>
-                        <table class="min-w-full border-collapse border border-gray-200">
+                        <table class="min-w-full border-collapse border border-gray-200 mb-6">
                             <thead class="bg-gray-100 border-b border-gray-200">
                                 <tr>
                                     <th class="text-center px-4 py-2 border border-gray-300">Alternatif</th>
@@ -108,21 +130,27 @@ $matrixResult = $selectdb->query($matrixQuery);
                                     <th class="text-center px-4 py-2 border border-gray-300">C3 (Benefit)</th>
                                     <th class="text-center px-4 py-2 border border-gray-300">C4 (Benefit)</th>
                                     <th class="text-center px-4 py-2 border border-gray-300">C5 (Benefit)</th>
+                                    <th class="text-center px-4 py-2 border border-gray-300">C6 (Benefit)</th>
+                                    <th class="text-center px-4 py-2 border border-gray-300">C7 (Benefit)</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <?php $no = 1; while ($data_hp = $matrixResult->fetch_assoc()): ?>
                                     <tr class="border-b border-gray-200 hover:bg-gray-50">
-                                        <td class="text-center px-4 py-2 border border-gray-300"><?= "A" . $no++; ?></td>
-                                        <td class="text-center px-4 py-2 border border-gray-300"><?= htmlspecialchars($data_hp['harga_angka']); ?></td>
-                                        <td class="text-center px-4 py-2 border border-gray-300"><?= htmlspecialchars($data_hp['ram_angka']); ?></td>
-                                        <td class="text-center px-4 py-2 border border-gray-300"><?= htmlspecialchars($data_hp['memori_angka']); ?></td>
-                                        <td class="text-center px-4 py-2 border border-gray-300"><?= htmlspecialchars($data_hp['processor_angka']); ?></td>
-                                        <td class="text-center px-4 py-2 border border-gray-300"><?= htmlspecialchars($data_hp['kamera_angka']); ?></td>
+                                        <td class="text-center px-4 py-2 border border-gray-300">A<?= $no++ ?></td>
+                                        <td class="text-center px-4 py-2 border border-gray-300"><?= htmlspecialchars($data_hp['harga_angka']) ?></td>
+                                        <td class="text-center px-4 py-2 border border-gray-300"><?= htmlspecialchars($data_hp['ram_angka']) ?></td>
+                                        <td class="text-center px-4 py-2 border border-gray-300"><?= htmlspecialchars($data_hp['memori_angka']) ?></td>
+                                        <td class="text-center px-4 py-2 border border-gray-300"><?= htmlspecialchars($data_hp['baterai_angka']) ?></td>
+                                        <td class="text-center px-4 py-2 border border-gray-300"><?= htmlspecialchars($data_hp['kamera_angka']) ?></td>
+                                        <td class="text-center px-4 py-2 border border-gray-300"><?= htmlspecialchars($data_hp['processor_angka']) ?></td>
+                                        <td class="text-center px-4 py-2 border border-gray-300"><?= htmlspecialchars($data_hp['jaringan_angka']) ?></td>
                                     </tr>
                                 <?php endwhile; ?>
                             </tbody>
                         </table>
+                    <?php else: ?>
+                        <p class="text-center">Tidak ada data dalam tabel matriks.</p>
                     <?php endif; ?>
                 </div>
             </div>
@@ -136,11 +164,12 @@ $matrixResult = $selectdb->query($matrixQuery);
     </div>
 
     <script>
-        const toggle = document.getElementById('accordion-toggle');
+        const toggleButton = document.getElementById('accordion-toggle');
         const content = document.getElementById('accordion-content');
 
-        toggle.addEventListener('click', () => {
+        toggleButton.addEventListener('click', () => {
             content.classList.toggle('hidden');
+            content.classList.toggle('block');
         });
     </script>
 </body>

@@ -119,6 +119,7 @@ function JarakIplus($aplus,$bob){
 	}
 	return $dplus;
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -334,6 +335,8 @@ function JarakIplus($aplus,$bob){
                                             <th class="border border-gray-300 px-4 py-2 text-center">C3 (Benefit)</th>
                                             <th class="border border-gray-300 px-4 py-2 text-center">C4 (Benefit)</th>
                                             <th class="border border-gray-300 px-4 py-2 text-center">C5 (Benefit)</th>
+                                            <th class="border border-gray-300 px-4 py-2 text-center">C6 (Benefit)</th>
+                                            <th class="border border-gray-300 px-4 py-2 text-center">C7 (Benefit)</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -347,7 +350,9 @@ function JarakIplus($aplus,$bob){
                                                 $MatrikNormalisasi[$no - 1][1] * $W2,
                                                 $MatrikNormalisasi[$no - 1][2] * $W3,
                                                 $MatrikNormalisasi[$no - 1][3] * $W4,
-                                                $MatrikNormalisasi[$no - 1][4] * $W5
+                                                $MatrikNormalisasi[$no - 1][4] * $W5,
+                                                $MatrikNormalisasi[$no - 1][5] * $W6,
+                                                $MatrikNormalisasi[$no - 1][6] * $W7
                                             );
                                         ?>
                                             <tr class="hover:bg-gray-50">
@@ -369,6 +374,12 @@ function JarakIplus($aplus,$bob){
                                                 <td class="border border-gray-300 px-4 py-2 text-center">
                                                     <?php echo round($MatrikNormalisasi[$no - 1][4] * $W5, 6) ?>
                                                 </td>
+                                                <td class="border border-gray-300 px-4 py-2 text-center">
+                                                    <?php echo round($MatrikNormalisasi[$no - 1][5] * $W6, 6) ?>
+                                                </td>
+                                                <td class="border border-gray-300 px-4 py-2 text-center">
+                                                    <?php echo round($MatrikNormalisasi[$no - 1][6] * $W7, 6) ?>
+                                                </td>
                                             </tr>
                                         <?php
                                             $no++;
@@ -380,14 +391,13 @@ function JarakIplus($aplus,$bob){
                         </div>
                     </div>
                     <div class="text-center my-6">
-                        <h4 class="text-xl font-semibold text-gray-700">Matrik Solusi Ideal Positif dan Negatif</h4>
+                        <h4 class="text-xl font-bold text-gray-700">Matrik Solusi Ideal Positif dan Negatif</h4>
                     </div>
                     <ul class="list-none">
                         <li>
                             <div class="flex justify-center">
                                 <div class="w-full max-w-4xl bg-white shadow-md rounded-lg overflow-hidden">
                                     <div class="p-6">
-                                        <h5 class="text-lg font-medium text-gray-800 mb-4">Matrik Solusi Ideal Positif "A+" dan Negatif "A-"</h5>
                                         <div class="overflow-x-auto">
                                             <table class="table-auto w-full border-collapse border border-gray-200">
                                                 <thead class="bg-gray-100">
@@ -398,6 +408,8 @@ function JarakIplus($aplus,$bob){
                                                         <th class="border border-gray-300 px-4 py-2 text-center">Y3 (Benefit)</th>
                                                         <th class="border border-gray-300 px-4 py-2 text-center">Y4 (Benefit)</th>
                                                         <th class="border border-gray-300 px-4 py-2 text-center">Y5 (Benefit)</th>
+                                                        <th class="border border-gray-300 px-4 py-2 text-center">Y6 (Benefit)</th>
+                                                        <th class="border border-gray-300 px-4 py-2 text-center">Y7 (Benefit)</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -411,7 +423,9 @@ function JarakIplus($aplus,$bob){
                                                             max($NormalisasiBobotTrans[1]),
                                                             max($NormalisasiBobotTrans[2]),
                                                             max($NormalisasiBobotTrans[3]),
-                                                            max($NormalisasiBobotTrans[4])
+                                                            max($NormalisasiBobotTrans[4]),
+                                                            max($NormalisasiBobotTrans[5]),
+                                                            max($NormalisasiBobotTrans[6])
                                                         );
                                                         ?>
                                                         <td class="border border-gray-300 px-4 py-2 text-center font-semibold">Y+</td>
@@ -430,6 +444,12 @@ function JarakIplus($aplus,$bob){
                                                         <td class="border border-gray-300 px-4 py-2 text-center">
                                                             <?php echo(round(max($NormalisasiBobotTrans[4]), 6)); ?>&nbsp;(max)
                                                         </td>
+                                                        <td class="border border-gray-300 px-4 py-2 text-center">
+                                                            <?php echo(round(max($NormalisasiBobotTrans[5]), 6)); ?>&nbsp;(max)
+                                                        </td>
+                                                        <td class="border border-gray-300 px-4 py-2 text-center">
+                                                            <?php echo(round(max($NormalisasiBobotTrans[6]), 6)); ?>&nbsp;(max)
+                                                        </td>
                                                     </tr>
                                                     <tr>
                                                         <?php
@@ -438,7 +458,9 @@ function JarakIplus($aplus,$bob){
                                                             min($NormalisasiBobotTrans[1]),
                                                             min($NormalisasiBobotTrans[2]),
                                                             min($NormalisasiBobotTrans[3]),
-                                                            min($NormalisasiBobotTrans[4])
+                                                            min($NormalisasiBobotTrans[4]),
+                                                            min($NormalisasiBobotTrans[5]),
+                                                            min($NormalisasiBobotTrans[6])
                                                         );
                                                         ?>
                                                         <td class="border border-gray-300 px-4 py-2 text-center font-semibold">Y-</td>
@@ -456,6 +478,12 @@ function JarakIplus($aplus,$bob){
                                                         </td>
                                                         <td class="border border-gray-300 px-4 py-2 text-center">
                                                             <?php echo(round(min($NormalisasiBobotTrans[4]), 6)); ?>&nbsp;(min)
+                                                        </td>
+                                                        <td class="border border-gray-300 px-4 py-2 text-center">
+                                                            <?php echo(round(min($NormalisasiBobotTrans[5]), 6)); ?>&nbsp;(min)
+                                                        </td>
+                                                        <td class="border border-gray-300 px-4 py-2 text-center">
+                                                            <?php echo(round(min($NormalisasiBobotTrans[6]), 6)); ?>&nbsp;(min)
                                                         </td>
                                                     </tr>
                                                 </tbody>
